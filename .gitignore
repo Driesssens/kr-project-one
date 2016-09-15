@@ -87,3 +87,6 @@ ENV/
 
 # Rope project settings
 .ropeproject
+.idea/misc.xml
+.idea/kr-project-one.iml
+.idea/workspace.xml
