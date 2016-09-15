@@ -37,7 +37,7 @@ def testKb(clauses):
             sol = l
         if l == 'Instance Satisfiable\n':
             sol = True
-        print l,
+        print(l),
 
     if sol == False:
         sol = '0'
@@ -52,10 +52,10 @@ def testKb(clauses):
         elif 'UNSAT' in result:
             return False
         else:
-            print "Error: SAT/UNSAT not indicated in query.cnf."
+            print("Error: SAT/UNSAT not indicated in query.cnf.")
             return False
     except StopIteration:
-            print "Error: Unexpected file end in query.cnf."
+            print("Error: Unexpected file end in query.cnf.")
             return False
 
 
@@ -94,19 +94,25 @@ def print_sudoku(sud,n):
         r += 1
 
 if __name__ == '__main__':
+
     clauses = [[-1, -2], [2, 1], [-2, -3], [3, 2], [-3, -1], [-3, -2], [1, 2, 3]]
-    res = testKb(clauses)
-    print 'KB is satisfiable:', res
 
-    [D, I] = create_sudoku_vars(9)
+    print clauses
 
-    with open('3d-puzzles.json', 'r+') as f:
-        data = json.load(f)
 
-    for i in range(80):
-        x = data[i]
-
-    p = x['puzzle']
-    z = x['solution']
-
-    print_sudoku(p,9)
+    # res = testKb(clauses)
+    # print('KB is satisfiable:', res)
+    #
+    # [D, I] = create_sudoku_vars(9)
+    #
+    # with open('3d-puzzles.json', 'r+') as f:
+    #     data = json.load(f)
+    #
+    # for i in range(80):
+    #     x = data[i]
+    #
+    # p = x['puzzle']
+    # z = x['solution']
+    #
+    # print_sudoku(p,9)
+    #
