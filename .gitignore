@@ -90,3 +90,7 @@ ENV/
 .idea/misc.xml
 .idea/kr-project-one.iml
 .idea/workspace.xml
+/threedoku/.idea/misc.xml
+/threedoku/.idea/modules.xml
+/threedoku/.idea/threedoku.iml
+/threedoku/.idea/workspace.xml
