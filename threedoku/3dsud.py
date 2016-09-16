@@ -159,6 +159,42 @@ def sudoku_str_2_list(sud_str, n):
             sud_list[row][col] = int(sud_str[n * row + col])
     return sud_list
 
+def check_3d_cube(curr_cube):
+
+    # Bar constraint
+    for row in range(1, 10):
+        for col in range(1, 10):
+            s = 0
+            for lay in range(1, 10):
+                s += curr_cube[lay - 1][row - 1][col - 1]
+            print ('Row: ' + str(row) + ' Col: ' + str(col) + ' Sum: ' + str(s))
+
+    # Row constraint
+    for lay in range(1, 10):
+        for col in range(1, 10):
+            s = 0
+            for row in range(1, 10):
+                s += curr_cube[lay - 1][row - 1][col - 1]
+            print ('Lay: ' + str(lay) + ' Col: ' + str(col) + ' Sum: ' + str(s))
+
+    # Column constraint
+    for lay in range(1, 10):
+        for row in range(1, 10):
+            s = 0
+            for col in range(1, 10):
+                s += curr_cube[lay - 1][row - 1][col - 1]
+            print ('Lay: ' + str(lay) + ' Row: ' + str(col) + ' Sum: ' + str(s))
+
+    # Box constraint
+    for lay in range(1,10):
+        for i in 1, 4, 7:
+            for j in 1, 4, 7:
+                s = 0
+                for k in range(9):
+                    s += curr_cube[lay - 1][i + k % 3 - 1][j + k // 3  - 1]
+                print ('Lay: ' + str(lay) + ' Row: ' + str(i) + ' Column: ' + str(j) +' Sum: ' + str(s))
+
+
 if __name__ == '__main__':
 
     with open('3d-puzzles.json', 'r+') as f:
@@ -192,32 +228,4 @@ if __name__ == '__main__':
 
     curr_cube = cube_list[cube]
 
-    for row in range(1, 10):
-        for col in range(1, 10):
-            s = 0
-            for lay in range(1, 10):
-                s += curr_cube[lay - 1][row - 1][col - 1]
-            print ('Row: ' + str(row) + ' Col: ' + str(col) + ' Sum: ' + str(s))
-
-    for lay in range(1, 10):
-        for col in range(1, 10):
-            s = 0
-            for row in range(1, 10):
-                s += curr_cube[lay - 1][row - 1][col - 1]
-            print ('Lay: ' + str(lay) + ' Col: ' + str(col) + ' Sum: ' + str(s))
-
-    for lay in range(1, 10):
-        for row in range(1, 10):
-            s = 0
-            for col in range(1, 10):
-                s += curr_cube[lay - 1][row - 1][col - 1]
-            print ('Lay: ' + str(lay) + ' Row: ' + str(col) + ' Sum: ' + str(s))
-
-    # for lay in range(1,10):
-    #     s = 0
-    #     for i in 1, 4, 7:
-    #         for j in 1, 4, 7:
-    #             s += curr_cube[lay - 1][row - 1][col - 1]
-    #     print ('Lay: ' + str(lay) + ' Row: ' + str(col) + ' Sum: ' + str(s))
-    #
-    #             valid(lay, [(i + k % 3, j + k // 3) for k in range(9)])
+    check_3d_cube(curr_cube)
