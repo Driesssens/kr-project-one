@@ -7,7 +7,7 @@ import json
 import subprocess
 
 
-############# zChaff ##############
+############# vvvv zChaff vvvvv ##############
 
 def test_kb(clauses):
     maxVar = 0
@@ -23,8 +23,7 @@ def test_kb(clauses):
             print >> out, literal,
         print >> out, '0'
     out.close();
-    process = subprocess.Popen('zchaff query.cnf', stdout=subprocess.PIPE,
-                               shell=True)
+    process = subprocess.Popen('zchaff query.cnf', stdout=subprocess.PIPE,shell=True)
     process.wait()
     stdout = process.stdout
 
@@ -57,9 +56,7 @@ def test_kb(clauses):
         return (False,[])
 
 
-
-
-############# zChaff ##############
+############# ^^^^^ zChaff ^^^^##############
 
 
 def num_rep(lay, row, col, dig):
@@ -87,14 +84,23 @@ def sudoku_3d_clauses():
                         res.append([-num_rep(lay, row, col, dig), -num_rep(lay, row, col, dig_dif)])
 
     def valid(lay, cells):
-        # Ensures that the input cells contain different values
+        # Ensure the input cells contain different values
         for row, xrow in enumerate(cells):
             for col, xcol in enumerate(cells):
                 if row < col:
                     for dig in range(1, 10):
                         res.append([-num_rep(lay, xrow[0], xrow[1], dig), -num_rep(lay, xcol[0], xcol[1], dig)])
 
-    # ensure rows and columns have distinct values
+    #Ensures that no numbers repeat within the same bar, i.e., across layers in the same row, column square
+
+    for row in range(1, 10):
+        for col in range(1, 10):
+            for lay1 in range(1, 10):
+                for lay2 in range(lay1 + 1, 10):
+                    for dig in range(1,10):
+                        res.append([-num_rep(lay1, row, col, dig), -num_rep(lay2, row, col, dig)])
+
+    # Ensure rows and columns have distinct values
     for lay in range(1,10):
         for i in range(1, 10):
             valid(lay, [(i, j) for j in range(1, 10)])
@@ -107,9 +113,6 @@ def sudoku_3d_clauses():
                 valid(lay, [(i + k % 3, j + k // 3) for k in range(9)])
 
     return res
-
-
-
 
 def solve3d(grid):
     """
@@ -148,6 +151,7 @@ def solve3d(grid):
             for col in range(1, 10):
                 grid[lay - 1][row - 1][col - 1] = read_cell(lay, row, col)
 
+
 def sudoku_str_2_list(sud_str, n):
     sud_list = [[0 for x in range(n)] for x in range(n)]
     for row in range(n):
@@ -167,11 +171,53 @@ if __name__ == '__main__':
         p = x['puzzle']
         cube_list[id // 9].append(sudoku_str_2_list(p, 9))
 
+    # Creates a list of solutions
+    sol_list = [[] for x in range(len(data) / 9)]
+    for id in range(len(data)):
+        x = data[id]
+        p = x['solution']
+        sol_list[id // 9].append(sudoku_str_2_list(p, 9))
+
+    pprint(cube_list[0])
+
     #Argument of the range refers to the number of cubes you want to solve
-    for cube in range(2):
+    for cube in range(1):
         print('Cube ' + str(cube+1))
         solve3d(cube_list[cube])
         pprint(cube_list[cube])
+        print(cube_list[cube] == sol_list[cube])
         print '\n'
 
+    pprint(sol_list[0])
 
+    curr_cube = cube_list[cube]
+
+    for row in range(1, 10):
+        for col in range(1, 10):
+            s = 0
+            for lay in range(1, 10):
+                s += curr_cube[lay - 1][row - 1][col - 1]
+            print ('Row: ' + str(row) + ' Col: ' + str(col) + ' Sum: ' + str(s))
+
+    for lay in range(1, 10):
+        for col in range(1, 10):
+            s = 0
+            for row in range(1, 10):
+                s += curr_cube[lay - 1][row - 1][col - 1]
+            print ('Lay: ' + str(lay) + ' Col: ' + str(col) + ' Sum: ' + str(s))
+
+    for lay in range(1, 10):
+        for row in range(1, 10):
+            s = 0
+            for col in range(1, 10):
+                s += curr_cube[lay - 1][row - 1][col - 1]
+            print ('Lay: ' + str(lay) + ' Row: ' + str(col) + ' Sum: ' + str(s))
+
+    # for lay in range(1,10):
+    #     s = 0
+    #     for i in 1, 4, 7:
+    #         for j in 1, 4, 7:
+    #             s += curr_cube[lay - 1][row - 1][col - 1]
+    #     print ('Lay: ' + str(lay) + ' Row: ' + str(col) + ' Sum: ' + str(s))
+    #
+    #             valid(lay, [(i + k % 3, j + k // 3) for k in range(9)])
