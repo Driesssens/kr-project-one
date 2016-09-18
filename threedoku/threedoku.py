@@ -1,4 +1,4 @@
-# pycosat way source: https://raw.githubusercontent.com/ContinuumIO/pycosat/master/examples/sudoku.pyd
+# pycosat way source: https://github.com/ContinuumIO/pycosat/blob/master/examples/sudoku.py
 # zchaff way source: http://modelai.gettysburg.edu/2011/clue/SATSolver.py
 
 
@@ -321,10 +321,15 @@ if __name__ == '__main__':
     stat_1l = []
 
     # Argument of range refers to the number of cubes you want to solve
-    t1 = time.time()
-    for cube in range(20):
-        if cube % 10 == 0:
+    for cube in range(len(cube_list)):
+        # Saves partial results every 100 cubes
+        if cube % 100 == 0:
+            sys.stdout = open('output.txt', 'w')
             print('Cube: ' + str(cube))
+            print(stat_3d)
+            print(stat_9l)
+            print(stat_1l)
+
 
         stat = solve3d(cube_list[cube])
         stat_3d.append(stat)
@@ -341,10 +346,11 @@ if __name__ == '__main__':
         acum_stat[-2] /= 9.0
         stat_1l.append(acum_stat)
 
-    print(time.time() - t1)
-
+    # Saves final results
     sys.stdout = open('output.txt', 'w')
-
+    print('Cube: ' + str(cube))
     print(stat_3d)
     print(stat_9l)
     print(stat_1l)
+
+
