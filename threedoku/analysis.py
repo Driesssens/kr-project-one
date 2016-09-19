@@ -1,5 +1,6 @@
 import re
-
+import math
+from matplotlib import pyplot as plt
 
 class Result:
     def __init__(self, full, independent, separate):
@@ -14,13 +15,13 @@ class Result:
 
 
 class Subresult:
-    def __init__(self, puzzle_type, satisfiability, restarts, decisions, propagations, conflicts, memory, time):
+    def __init__(self, puzzle_type, satisfiability, conflicts, decisions, propagations, conflict_literals, memory, time):
         self.puzzle_type = puzzle_type
         self.satisfiability = satisfiability
-        self.restarts = restarts
+        self.conflicts = conflicts
         self.decisions = decisions
         self.propagations = propagations
-        self.conflicts = conflicts
+        self.conflict_literals = conflicts
         self.memory = memory
         self.time = time
 
@@ -42,8 +43,6 @@ def load_data(filename = "sudoku_output.txt", items = 5354):
         independent = parse_result_from(independent_layers_data[i], "independant")
         separate = parse_result_from(separate_layers_data[i], "separate")
         results.append(Result(full, independent, separate))
-        if i%100 == 0:
-            print(str(int((i/float(items))*100)) + "%")
 
     return results
 
@@ -68,7 +67,43 @@ def parse_result_from(data, puzzle_type):
                      float(numbers[6])
                      )
 
-test = load_data()
-print(test[1])
-print(test[-5])
+
+def plot_decisions(number):
+    data = load_data()
+    plt.figure(figsize=(50, 80))
+
+    for i in range(number):
+        plt.scatter(i, data[i].full.decisions, color='blue', s = 2)
+        plt.scatter(i, data[i].separate.decisions, color='green', s = 2)
+        plt.scatter(i, data[i].independent.decisions, color='red', s = 2)
+
+    plt.show()
+
+
+def plot_time(number):
+    data = load_data()
+    plt.figure(figsize=(50, 80))
+
+    for i in range(number):
+        plt.scatter(i, data[i].full.time, color='blue', s = 2)
+        plt.scatter(i, data[i].separate.time, color='green', s = 2)
+        plt.scatter(i, data[i].independent.time, color='red', s = 2)
+
+    plt.show()
+
+
+def plot_decisions_log(number):
+    data = load_data()
+    plt.figure(figsize=(50, 80))
+
+    for i in range(number):
+        plt.scatter(i, math.log(data[i].full.decisions), color='blue', s = 2)
+        plt.scatter(i, math.log(data[i].separate.decisions), color='green', s = 2)
+        plt.scatter(i, math.log(data[i].independent.decisions), color='red', s = 2)
+
+    plt.show()
+
+plot_decisions(1000)
+
+
 
