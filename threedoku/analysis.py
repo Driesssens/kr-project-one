@@ -7,6 +7,11 @@ class Result:
         self.independent = independent
         self.separate = separate
 
+    def __str__(self):
+        return """Result(full        = {0}
+       independent = {1}
+       separate    = {2})""".format(self.full, self.independent, self.separate)
+
 
 class Subresult:
     def __init__(self, puzzle_type, satisfiability, restarts, decisions, propagations, conflicts, memory, time):
@@ -18,6 +23,10 @@ class Subresult:
         self.conflicts = conflicts
         self.memory = memory
         self.time = time
+
+    def __str__(self):
+        return """[satisfiable: {0: <2}| restarts: {1: <4}| decisions: {2: <5}| propagations: {3: <6}| conflicts: {4: <6}| memory: {5: <4}: time: {6: <4}]"""\
+            .format(self.satisfiability, self.restarts, self.decisions, self.propagations, self.conflicts, self.memory, self.time)
 
 
 def load_data(filename = "sudoku_output.txt", items = 5354):
@@ -34,7 +43,7 @@ def load_data(filename = "sudoku_output.txt", items = 5354):
         separate = parse_result_from(separate_layers_data[i], "separate")
         results.append(Result(full, independent, separate))
         if i%100 == 0:
-            print(str((i/float(items))*100) + "%")
+            print(str(int((i/float(items))*100)) + "%")
 
     return results
 
@@ -60,4 +69,6 @@ def parse_result_from(data, puzzle_type):
                      )
 
 test = load_data()
-pass
+print(test[1])
+print(test[-5])
+
